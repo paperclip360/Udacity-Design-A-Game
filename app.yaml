@@ -1,0 +1,17 @@
+application: mygame-1342 
+version: 1 
+runtime: python27
+api_version: 1 
+threadsafe: true
+
+handlers:
+
+- url: /_ah/spi/.*
+  script: game.APPLICATION
+  secure: always
+
+libraries:
+
+# You must include the Endpoints library if you wish to serve an API.
+- name: endpoints
+  version: 1.0

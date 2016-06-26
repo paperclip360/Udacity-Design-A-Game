@@ -135,9 +135,5 @@ Forms Included:
 
 Some thoughts on design...
 
-    Game implementation is a very basic one, admittedly with some drawbacks or limitations
-    I chose not to implement 'Guess the whole word' functionality for the sake of simplicity
-    Another pitfall would be that sometimes very strange words are chosen as targets. This is because I use a remotely-stored dictionary that is taken from an obscure website. However it comes with some advantages: e.g. there are a litany of words in that dictionary so it's a safe bet that a word won't come up twice + I did not have to hard-code the list of words
-    I altered the way in which remaining attempts are subtracted: if the user guesses a valid letter (i.e. one that is part of the word) he will still have the same number of attempts as before the guess. Users only get penalised when guessing an invalid letter
-    My take on the score keeping is a simple one: score is computed as number of wins minus number of defeats for each user. Be that as it may, I still think it's an efficient one since a user with many wins will have a high score and, conversely, one with a lot of losses and/or a small number of victories will have a low ranking
-    Another feature of the game is that an asterixed version of the word is showed at each step of the game. The more letters the user guesses, the more asterixes get transformed into letters (the user's word mirrors the target word). I chose asterixes instead of underscores (as it's usually the case with Hangman) because they are easier to visualise by the players
+    Game implementation is very basic.
+    I hard coded a small list of words, this could be expanded or use a remote dictionary of some kind in the future, but to keep it simple I chose a few words, with no repeated letters. 

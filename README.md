@@ -144,6 +144,6 @@ Forms Included:
     HighScoreForms
         Returns multiple HighScoreForms
     RankingForm
-	Representation of user and wins for ranking
+        Representation of user and wins for ranking
     RankingForms
-	Returns multiple rankings for users
+        Returns multiple rankings for users

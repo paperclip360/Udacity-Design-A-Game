@@ -66,12 +66,12 @@ Endpoints Included:
         Returns: ScoreForms.
         Description: Returns all Scores recorded by the provided player (unordered). Will raise a NotFoundException if the User does not exist.
         
-    <!--get_rankings-->
-    <!--    Path: 'scores/rankings'-->
-    <!--    Method: GET-->
-    <!--    Parameters: None-->
-    <!--    Returns: RankingForms-->
-    <!--    Description: Get all user rankings-->
+    get_user_rankings
+        Path: 'users/ranks/{top}'
+        Method: GET
+        Parameters: top
+        Returns: RankingForms
+        Description: Get all user rankings, limited to top parameter of choosing.
 
     get_user_games
         Path: 'games/user/{name}'
@@ -132,8 +132,12 @@ Forms Included:
         Used to limit the number of high scores
     HighScoreForms
         Returns multiple HighScoreForms
+    RankingForm
+	Representation of user and wins for ranking
+    RankingForms
+	Returns multiple rankings for users
 
 Some thoughts on design...
 
-    Game implementation is very basic.
-    I hard coded a small list of words, this could be expanded or use a remote dictionary of some kind in the future, but to keep it simple I chose a few words, with no repeated letters. 
+Game implementation is very basic.
+I hard coded a small list of words, this could be expanded or use a remote dictionary of some kind in the future, but to keep it simple I chose a few words, with no repeated letters. I also incorporated a cron job to send emails to users who have registered but have no logged any wins yet. I did this to encourage payers to play the game and move up the rankings. 

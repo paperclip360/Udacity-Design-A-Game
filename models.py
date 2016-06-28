@@ -6,6 +6,10 @@ class User(ndb.Model):
     """User profile"""
     name = ndb.StringProperty(required=True)
     wins = ndb.IntegerProperty(required=False)
+    email = ndb.StringProperty(required=False)
+
+    def to_rankform(self):
+        return RankingForm(user=self.name, wins=self.wins)
 
 class Score(ndb.Model):
     """Scoreboard object"""
@@ -19,6 +23,8 @@ class Score(ndb.Model):
 
     def to_highform(self):
         return HighScoreForm(user=self.user.get().name, score=self.score)
+
+
 
 
 class Game(ndb.Model):
@@ -138,3 +144,12 @@ class HighScoreForm(messages.Message):
 class HighScoreForms(messages.Message):
     """Returns multiple scores for score rankings"""
     items = messages.MessageField(HighScoreForm,1,repeated=True)
+
+class RankingForm(messages.Message):
+    """Used to store User and Wins for Ranking"""
+    user = messages.StringField(1, required=True)
+    wins = messages.IntegerField(2, required=True)
+
+class RankingForms(messages.Message):
+    """Returns multiple Ranking Forms"""
+    items = messages.MessageField(RankingForm,1,repeated=True)

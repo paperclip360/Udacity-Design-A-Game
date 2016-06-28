@@ -1,4 +1,4 @@
-application: mygame-1342 
+application: guess-a-word 
 version: 1 
 runtime: python27
 api_version: 1 
@@ -6,11 +6,21 @@ threadsafe: true
 
 handlers:
 
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
 - url: /_ah/spi/.*
   script: game.APPLICATION
   secure: always
 
+- url: /crons/send_reminder
+  script: main.app
+
 libraries:
+  
+- name: webapp2
+  version: "2.5.2"
 
 # You must include the Endpoints library if you wish to serve an API.
 - name: endpoints

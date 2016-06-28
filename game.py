@@ -4,14 +4,18 @@ from protorpc import messages
 from protorpc import message_types
 from protorpc import remote
 from google.appengine.ext import ndb
+from google.appengine.api import memcache
+from google.appengine.api import taskqueue
+import logging
 
-from models import Game, GameForm, NewGameForm, MakeMoveForm, User, Score, ScoreForm, ScoreForms, UserGameForm, UserGameForms, HighScoreForm, HighScoreForms, GameHistoryForm
+
+from models import Game, GameForm, NewGameForm, MakeMoveForm, User, Score, ScoreForm, ScoreForms, UserGameForm, UserGameForms, HighScoreForm, HighScoreForms, GameHistoryForm, RankingForm, RankingForms
 
 from utils import get_by_urlsafe
 
 
 #request parameteres passed to the endpoint method argument wrapper
-USER_REQUEST = endpoints.ResourceContainer(name=messages.StringField(1))
+USER_REQUEST = endpoints.ResourceContainer(name=messages.StringField(1), email=messages.StringField(2))
 NEW_GAME_REQUEST = endpoints.ResourceContainer(NewGameForm)
 MAKE_MOVE_REQUEST = endpoints.ResourceContainer(
     MakeMoveForm,
@@ -37,7 +41,7 @@ class HangmanApi(remote.Service):
         """Creates new user"""
     	if User.query(User.name == request.name).get():
     		raise endpoints.ConflictException('A User with that name already exists!')
-    	user = User(name=request.name,wins=0)
+    	user = User(name=request.name,wins=0,email=request.email)
     	user.put()
     	return JSONMessage(message="User {} added!".format(request.name))
    
@@ -95,14 +99,16 @@ class HangmanApi(remote.Service):
 
             if request.guess in game.target:            
                 position = game.target.find(request.guess)
-                game.correct[position] = request.guess.upper()
-                
+                game.correct[position] = request.guess.upper()                           
                 
                 if (str("".join(game.correct))) == (str(game.target.upper())):
                     game.all_guesses.append('Correctly guessed {} and found {} to win the game!'.format(request.guess.upper(),game.target.upper()))
                     game.score += game.attempts_remaining
                     game.win_loss = "WIN"
                     score = Score(user=game.user,game=game.key,win_loss=game.win_loss,score=game.score)
+                    win_user = User.query(User.key == game.user).get()
+                    win_user.wins += 1
+                    win_user.put()
                     score.put()
                     game.put()
                     game.end_game(False)
@@ -226,16 +232,20 @@ class HangmanApi(remote.Service):
         number_of_results = request.top
         return HighScoreForms(items=[score.to_highform() for score in Score.query().order(-Score.score).fetch(number_of_results, offset=0)])
 
-    # @endpoints.method(request_message = GET_RANKINGS_REQUEST,
-    #                   response_message=RankingForms,
-    #                   path='users/ranks/{top}',
-    #                   name='get_user_rankings',
-    #                   http_method='GET')
-    # def get_user_rankings(self, request):
-    #     """Returns a list of the top players"""
-    #     rank_list = Score.query(ndb.AND(Score.user == name, Score.wins_loss=="WIN")).count()
-    #     number_of_results = request.top
-    #     return RankingForms(items=[rank_list.to_rankform() for user in rank_list])
+    @endpoints.method(request_message = GET_RANKINGS_REQUEST,
+                      response_message=RankingForms,
+                      path='users/ranks/{top}',
+                      name='get_user_rankings',
+                      http_method='GET')
+    def get_user_rankings(self, request):
+        """Returns a list of the top players"""
+        number_of_results = request.top
+        # users = User.query().order(-User.wins).fetch(number_of_results, offset=0)
+        # listed = []
+        # for user in users:
+        #     listed.append(user)
+        # return JSONMessage(message="{}".format(listed))
+        return RankingForms(items=[user.to_rankform() for user in User.query().order(-User.wins).fetch(number_of_results, offset=0)])
 
     @endpoints.method(request_message=GET_GAME_REQUEST,
                       response_message=GameHistoryForm,

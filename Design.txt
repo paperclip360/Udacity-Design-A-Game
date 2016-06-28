@@ -1,6 +1,12 @@
 Some thoughts on design...
 
 Game implementation is very basic.
-I hard coded a small list of words, this could be expanded or use a remote dictionary of some kind in the future, but to keep it simple I chose a few words, with no repeated letters.
+
+I hard coded a small list of words which could be expanded or use a remote dictionary of some kind in the future. 
+To keep it simple I chose a few words, with no repeated letters, as repeated letters would require a bit more logic code to handle.
+
 I also incorporated a cron job to send emails to users who have registered but have no logged any wins yet.
 I did this to encourage payers to play the game and move up the rankings. 
+
+Also, for simplicity I did not require authentication for users, simply required the user to register their name before playing. 
+This could also be improved for future design. 

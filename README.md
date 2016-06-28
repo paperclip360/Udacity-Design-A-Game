@@ -1,8 +1,13 @@
 Full Stack Nanodegree Project - Hangman API
+
+Link to working Google App Engine API ... 
+
+https://apis-explorer.appspot.com/apis-explorer/?base=https://guess-a-word.appspot.com/_ah/api#p/hangman/v1/
+
 Set-Up Instructions:
 
-    Update the value of application in app.yaml to the app ID you have registered in the App Engine admin console and would like to use to host your instance of this sample.
-    Run the app with the devserver using dev_appserver.py DIR, and ensure it's running by visiting the API Explorer - by default localhost:8080/_ah/api/explorer.
+Update the value of application in app.yaml to the app ID you have registered in the App Engine admin console and would like to use to host your instance of this sample.
+Run the app with the devserver using dev_appserver.py DIR, and ensure it's running by visiting the API Explorer - by default localhost:8080/_ah/api/explorer.
 
 Game Description:
 

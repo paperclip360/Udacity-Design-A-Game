@@ -6,7 +6,8 @@ import logging
 
 import webapp2
 from google.appengine.api import mail, app_identity
-from api import HangmanApi
+from google.appengine.ext import ndb
+from game import HangmanApi
 
 from models import User
 
